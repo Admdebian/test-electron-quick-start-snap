@@ -30,7 +30,7 @@ plugs:
 parts:
   electron-helloworld:
     plugin: nodejs
-    source: https://github.com/electron/electron-quick-start.git
+    source: . #https://github.com/electron/electron-quick-start.git
     after: [desktop-gtk3]
     override-build: |
         case $SNAPCRAFT_ARCH_TRIPLET in
