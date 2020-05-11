@@ -1,5 +1,5 @@
 name: electron-hello-world-kiosk
-version: '0.1'
+version: '0.3'
 summary: Hello World Electron app
 description: |
   Simple Hello World Electron app as an example
@@ -9,7 +9,15 @@ grade: devel
 
 apps:
   electron-hello-world-kiosk:
-    command: desktop-launch "$SNAP/electron-helloworld/electron-quick-start" "--no-sandbox"
+    command: desktop-launch xwayland-kiosk-launch "$SNAP/electron-helloworld/electron-quick-start" "--no-sandbox"
+
+  daemon:
+    daemon: simple
+    restart-condition: always
+    command: desktop-launch xwayland-kiosk-launch "$SNAP/electron-helloworld/electron-quick-start" "--no-sandbox"
+
+environment:
+  XWAYLAND_FULLSCREEN_WINDOW_HINT: window_role="browser-window"
 
 plugs:
   browser-support:
@@ -17,7 +25,7 @@ plugs:
   network-bind:
   opengl:
   pulseaudio:
-  x11:
+  wayland:
 
 parts:
   electron-helloworld:
@@ -75,3 +83,9 @@ parts:
       - xdg-user-dirs
       - ibus-gtk3
       - libibus-1.0-5
+
+  xwayland-kiosk-helper:
+    plugin: cmake
+    source: https://github.com/MirServer/xwayland-kiosk-helper.git
+    build-packages: [ build-essential ]
+    stage-packages: [ xwayland, i3, libegl1-mesa, libgl1-mesa-glx ]
