@@ -1,0 +1,17 @@
+build command not found
+- used electron-builder
+
+Cannot find module 'electron' from '/root/parts/electron-helloworld/build'
+- inserted electron in npm install
+
+Test command:
+
+    snapcraft snap
+    sudo snap install electron-hello-world-kiosk_0.10_amd64.snap --devmode
+
+snap  connections | grep electron:
+
+    browser-support                       electron-hello-world-kiosk:browser-support  :browser-support                                      -
+    network                               electron-hello-world-kiosk:network          :network                                              -
+    network-bind                          electron-hello-world-kiosk:network-bind     :network-bind                                         -
+    opengl                                electron-hello-world-kiosk:opengl           :opengl 
