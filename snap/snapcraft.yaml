@@ -1,5 +1,5 @@
 name: electron-hello-world-kiosk
-version: '0.5'
+version: '0.9'
 summary: Hello World Electron app for a Kiosk
 description: |
   Simple Hello World Electron app as an example of a HTML5 Kiosk
@@ -14,7 +14,9 @@ apps:
   daemon:
     daemon: simple
     restart-condition: always
-    command: desktop-launch xwayland-kiosk-launch "$SNAP/electron-helloworld/electron-quick-start" "--no-sandbox"
+    #command: desktop-launch xwayland-kiosk-launch "$SNAP/electron-helloworld/electron-quick-start" "--no-sandbox"
+    command: desktop-launch xwayland-kiosk-launch "$SNAP/electron-helloworld/electron-quick-start"
+    #command: run-daemon wayland-launch "$SNAP/electron-helloworld/electron-quick-start" "--no-sandbox"
 
 environment:
   XWAYLAND_FULLSCREEN_WINDOW_HINT: window_role="browser-window"
@@ -26,6 +28,24 @@ plugs:
   opengl:
   pulseaudio:
   wayland:
+
+layout:
+  /etc/glvnd:
+    bind: $SNAP/etc/glvnd
+  /etc/fonts:
+    bind: $SNAP/etc/fonts
+  /etc/xdg:
+    bind: $SNAP/etc/xdg
+  /usr/share/X11/xkb:
+    bind: $SNAP/usr/share/X11/xkb
+  /usr/share/fonts:
+    bind: $SNAP/usr/share/fonts
+  /usr/share/glvnd:
+    bind: $SNAP/usr/share/glvnd
+  /usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/qt5:
+    bind: $SNAP/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/qt5
+  /usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/dri:
+    bind: $SNAP/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/dri
 
 parts:
   electron-helloworld:
@@ -88,3 +108,9 @@ parts:
     source: https://github.com/MirServer/xwayland-kiosk-helper.git
     build-packages: [ build-essential ]
     stage-packages: [ xwayland, i3, libegl1-mesa, libgl1-mesa-glx ]
+
+environment:
+  # Qt Platform to Wayland
+  QT_QPA_PLATFORM: wayland
+  QTCHOOSER_NO_GLOBAL_DIR: 1
+  QT_SELECT: snappy-qt5
